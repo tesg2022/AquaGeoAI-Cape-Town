@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# Secrets and credentials
+*service-account*.json
+*credentials*.json
+secrets/
+*.pem
+*.key
+
+# Editor/OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Backend Python
+backend/.venv/
+backend/__pycache__/
+backend/**/*.pyc
+
+# Local environment files
+backend/.env
+backend/.env.*
+!backend/.env.example

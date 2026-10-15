@@ -6,7 +6,8 @@
   <meta name="theme-color" content="#0b3d4f">
   <meta name="description" content="AquaGeoAI Cape Town integrates Earth observation, climate data, geospatial analytics and hydrological modelling to support water security and climate resilience.">
   <title>AquaGeoAI Cape Town | Water & Climate Intelligence</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css">
+  <link rel="stylesheet" href="css/styles.css">
 
 </head>
 <body>
@@ -28,6 +29,7 @@
       </a>
       <nav aria-label="Main navigation">
         <a href="#solution">The Solution</a>
+        <a href="#live-map">Interactive Map</a>
         <a href="#capabilities">Capabilities</a>
         <a href="#users">Who It Helps</a>
         <a class="button button-primary" href="#platform">Explore Platform</a>
@@ -62,6 +64,47 @@
               <div class="stat-mini"><strong>Spatial insights</strong><span>Risk screening · Priorities</span></div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="live-map-section" id="live-map">
+      <div class="container">
+        <div class="section-heading">
+          <div class="section-kicker">Interactive map</div>
+          <h2>Explore Cape Town geographically.</h2>
+          <p>This live basemap provides geographic context. AquaGeoAI analytical layers will appear here after their data pipelines and validation are implemented.</p>
+        </div>
+        <div class="map-panel">
+          <div class="map-toolbar">
+            <div class="rainfall-controls">
+              <label for="rainfall-year">Annual rainfall year</label>
+              <select id="rainfall-year">
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+              </select>
+              <button class="map-control-button" id="load-rainfall" type="button">Load rainfall layer</button>
+            </div>
+
+            <div>
+              <strong>City of Cape Town</strong>
+              <span class="map-status"><span class="status-dot"></span> Live basemap · analytical layers not connected</span>
+            </div>
+            <button class="map-control-button" id="reset-map" type="button">Reset view</button>
+          </div>
+          <div id="aquageoai-map" role="application" aria-label="Interactive map centered on Cape Town, South Africa"></div>
+          <div class="map-legend">
+            <strong>Planned data layers</strong>
+            <span class="layer-chip">Annual rainfall — not loaded</span>
+            <span class="layer-chip">Vegetation / NDVI — pending</span>
+            <span class="layer-chip">Groundwater recharge screening — pending validation</span>
+          </div>
+          <p class="map-disclaimer" id="map-status">The basemap is interactive. Load an annual CHIRPS rainfall layer after configuring the backend API. NDVI and recharge layers are not yet connected.</p>
         </div>
       </div>
     </section>
@@ -176,7 +219,8 @@
       <span>GeoAI-Powered Water and Climate Intelligence · Cape Town, South Africa</span>
     </div>
   </footer>
-    <script src="js/app.js" defer></script>
+    <script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js" defer></script>
+  <script src="js/app.js" defer></script>
 
 </body>
 </html>

@@ -1,67 +1,44 @@
-# AquaGeoAI Cape Town
+# AquaGeoAI Cape Town API
 
-**GeoAI-Powered Water & Climate Intelligence**
+## Implemented in this starter version
 
-AquaGeoAI Cape Town is a developing WebGIS concept for bringing Earth observation, climate indicators, geospatial analytics, and hydrological modelling together to support water security and climate resilience in Cape Town, South Africa.
+- `GET /api/health`: API health check.
+- `GET /api/v1/layers`: catalogue of implemented/planned layers.
+- `GET /api/v1/rainfall/annual?year=2020`: mean of annual CHIRPS pixel totals over the City of Cape Town AOI.
+- `GET /api/v1/rainfall/annual/map?year=2020`: creates a temporary Earth Engine raster tile URL for the MapLibre rainfall overlay.
 
-## Current website
+The API requires Earth Engine authentication configured outside the source tree, a valid Cloud project ID, and read access to `projects/ee-ttgintamo/assets/City_of_Cape_Town`. The code assumes the AOI is an Earth Engine FeatureCollection. Verify the asset type in the Earth Engine Assets panel first.
 
-The current version is a responsive static landing page. Its map-style graphic is illustrative; it is **not** a live GIS map and the page does not yet connect to live datasets or a backend.
+## Local run
 
-## Project structure
-
-```text
-AquaGeoAI-Cape-Town/
-├── index.html
-├── README.md
-├── assets/
-│   ├── images/
-│   │   └── .gitkeep
-│   └── logo.svg
-├── css/
-│   └── styles.css
-├── js/
-│   └── app.js
-├── docs/
-│   └── data-sources.md
-└── .gitignore
-```
-
-## Run locally
-
-No build process is required for the landing page.
-
-1. Download or clone this repository.
-2. Open `index.html` in a browser.
-
-For a local development server, if Python is installed, run this from the project directory:
+From this directory:
 
 ```bash
-python -m http.server 8000
+python -m venv .venv
+# Activate the virtual environment
+pip install -r requirements.txt
+earthengine authenticate
 ```
 
-Then open `http://localhost:8000`.
+Set `GEE_PROJECT_ID` to your actual Google Cloud project ID in your shell or local `.env` loader. Do not commit real `.env` files or credentials.
 
-## Publish with GitHub Pages
+Run:
 
-1. Create a GitHub repository named `AquaGeoAI-Cape-Town`.
-2. Upload the contents of this project folder to the repository root.
-3. In the repository, open **Settings → Pages**.
-4. Under the build/deployment source, choose **Deploy from a branch**.
-5. Select branch `main` and folder `/(root)`, then save.
+```bash
+uvicorn app.main:app --reload
+```
 
-The site will usually be available at `https://YOUR-USERNAME.github.io/AquaGeoAI-Cape-Town/` after deployment completes.
+Try `http://127.0.0.1:8000/api/health`, `http://127.0.0.1:8000/docs`, and `http://127.0.0.1:8000/api/v1/rainfall/annual?year=2020`.
 
-## Planned development
+## Frontend connection
 
-- Add a real interactive map using a suitable web mapping library.
-- Connect approved geospatial datasets and document their spatial and temporal resolution.
-- Develop drought-risk and groundwater-recharge screening workflows.
-- Add a backend API for data processing and model services where needed.
-- Validate analytical outputs against appropriate local observations and reference datasets.
+In `../js/app.js`, set `AQUAGEOAI_API_BASE` to the backend origin. The default points to `http://127.0.0.1:8000` for local development. For production, use HTTPS and add your frontend origin to the backend's `FRONTEND_ORIGINS` setting.
 
-## Scientific and data-use notes
+## Important limitations
 
-Rainfall minus evapotranspiration can be used as a preliminary water-availability screening indicator, but it is not a direct measurement of groundwater recharge. NDVI indicates vegetation greenness/condition and is not, by itself, a water-quality measurement. Groundwater-recharge and water-quality assessments require suitable methods, data, and local validation.
-
-Do not commit API keys, Earth Engine service-account keys, passwords, or other secrets to this public repository.
+- The annual statistic is the mean of annual pixel totals within the AOI, not a catchment water balance.
+- CHIRPS rainfall is an estimate; document its limitations and spatial scale.
+- The raster map endpoint returns a browser-usable Earth Engine tile URL which may contain a temporary token. For sensitive data or stricter access controls, proxy tile requests through an authenticated backend.
+- The current map styling is illustrative; adjust the palette/range for local rainfall distributions and include a visible legend before operational use.
+- `P - ET` is only a screening indicator, not direct groundwater recharge.
+- Water-quality analysis and a validated recharge model are not implemented by this API scaffold.
